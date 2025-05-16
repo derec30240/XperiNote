@@ -32,8 +32,14 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper> {
       child: Column(
         children: [
           UserAccountsDrawerHeader(
-            accountName: Text('研究员'),
-            accountEmail: Text('researcher@example.com'),
+            accountName: Text(
+              '研究员',
+              style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+            ),
+            accountEmail: Text(
+              'researcher@example.com',
+              style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+            ),
             currentAccountPicture: CircleAvatar(
               backgroundColor: Colors.white,
               child: Text(
@@ -72,9 +78,7 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper> {
           BottomNavigationBarItem(icon: Icon(Icons.library_books), label: '模板'),
           BottomNavigationBarItem(icon: Icon(Icons.people), label: '社区'),
         ],
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        showUnselectedLabels: true,
+        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
