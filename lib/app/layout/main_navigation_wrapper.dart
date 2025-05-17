@@ -65,7 +65,6 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('研记')),
       drawer: _buildDrawer(context),
       drawerEnableOpenDragGesture: Get.currentRoute == AppRoutes.home,
       body: IndexedStack(index: _selectedIndex, children: _pages),
