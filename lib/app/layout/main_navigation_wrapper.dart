@@ -70,15 +70,26 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper> {
       drawer: _buildDrawer(context),
       drawerEnableOpenDragGesture: Get.currentRoute == AppRoutes.home,
       body: IndexedStack(index: _selectedIndex, children: _pages),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.science), label: '实验'),
-          BottomNavigationBarItem(icon: Icon(Icons.library_books), label: '模板'),
-          BottomNavigationBarItem(icon: Icon(Icons.people), label: '社区'),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: _onItemTapped,
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.science_outlined),
+            label: '实验',
+            selectedIcon: Icon(Icons.science),
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.library_books_outlined),
+            label: '模板',
+            selectedIcon: Icon(Icons.library_books),
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.people_outlined),
+            label: '社区',
+            selectedIcon: Icon(Icons.people),
+          ),
         ],
-        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
