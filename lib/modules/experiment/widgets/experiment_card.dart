@@ -37,7 +37,9 @@ class ExperimentCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('开始时间: ${DateFormat('yyyy-MM-dd HH:mm').format(experiment.startTime)}'),
+                Text(
+                  '开始时间: ${DateFormat('yyyy-MM-dd HH:mm').format(experiment.createAt)}',
+                ),
                 IconButton(
                   icon: const Icon(Icons.chevron_right),
                   onPressed: () => _navigateToDetail(context),

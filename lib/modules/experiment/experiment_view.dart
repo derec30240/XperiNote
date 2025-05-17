@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:get/state_manager.dart';
 import 'package:get/get.dart';
 import 'package:xperinote/data/controllers/experiment_controller.dart';
 import 'package:xperinote/data/models/experiment_model.dart';
 import 'package:xperinote/modules/experiment/widgets/experiment_card.dart';
 
 class ExperimentView extends GetView<ExperimentController> {
-  ExperimentView({super.key});
+  const ExperimentView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +22,7 @@ class ExperimentView extends GetView<ExperimentController> {
           title: Text('实验'),
           bottom: TabBar(tabs: const [Tab(text: '进行中'), Tab(text: '已完成')]),
         ),
-        body: _buildContent(),
+        body: Obx(() => _buildContent()),
       ),
     );
   }

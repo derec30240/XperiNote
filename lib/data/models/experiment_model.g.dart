@@ -19,7 +19,7 @@ class ExperimentAdapter extends TypeAdapter<Experiment> {
     return Experiment(
       id: fields[0] as String,
       title: fields[1] as String,
-      startTime: fields[2] as DateTime,
+      createAt: fields[2] as DateTime,
       status: fields[3] as ExperimentStatus,
       progress: fields[4] as int,
     );
@@ -34,7 +34,7 @@ class ExperimentAdapter extends TypeAdapter<Experiment> {
       ..writeByte(1)
       ..write(obj.title)
       ..writeByte(2)
-      ..write(obj.startTime)
+      ..write(obj.createAt)
       ..writeByte(3)
       ..write(obj.status)
       ..writeByte(4)

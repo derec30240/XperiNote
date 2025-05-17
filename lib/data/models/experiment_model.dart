@@ -10,7 +10,7 @@ class Experiment {
   final String title;
 
   @HiveField(2)
-  final DateTime startTime;
+  final DateTime createAt;
 
   @HiveField(3)
   final ExperimentStatus status;
@@ -21,7 +21,7 @@ class Experiment {
   Experiment({
     required this.id,
     required this.title,
-    required this.startTime,
+    required this.createAt,
     this.status = ExperimentStatus.ongoing,
     this.progress = 0,
   });

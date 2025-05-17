@@ -12,9 +12,15 @@ class ExperimentController extends GetxController {
   AsyncStatus get status => _status.value;
   List<Experiment> get experiments => _experiments.toList();
   List<Experiment> get ongoingExperiments =>
-      _experiments.where((experiment) => experiment.status == ExperimentStatus.ongoing).toList();
+      _experiments
+          .where((experiment) => experiment.status == ExperimentStatus.ongoing)
+          .toList();
   List<Experiment> get completedExperiments =>
-      _experiments.where((experiment) => experiment.status == ExperimentStatus.completed).toList();
+      _experiments
+          .where(
+            (experiment) => experiment.status == ExperimentStatus.completed,
+          )
+          .toList();
 
   @override
   void onInit() {
@@ -35,11 +41,6 @@ class ExperimentController extends GetxController {
       update();
     }
   }
-}
-
-void setupExperimentDependencies() {
-  Get.lazyPut<ExperimentRepository>(() => HiveExperimentRepository());
-  Get.lazyPut<ExperimentController>(() => ExperimentController(Get.find<ExperimentRepository>()));
 }
 
 enum AsyncStatus { loading, success, error }

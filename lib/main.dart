@@ -1,30 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:xperinote/app/routes/app_pages.dart';
+import 'package:xperinote/app/routes/app_routes.dart';
 import 'package:xperinote/app/theme/app_theme.dart';
-import 'package:xperinote/data/controllers/settings_controller.dart';
 import 'package:xperinote/data/controllers/experiment_controller.dart';
+import 'package:xperinote/data/controllers/settings_controller.dart';
 import 'package:xperinote/data/models/experiment_model.dart';
 import 'package:xperinote/data/repositories/experiment_repository.dart';
-import 'app/routes/app_pages.dart';
-import 'app/routes/app_routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Get.putAsync(() => SharedPreferences.getInstance());
-  Get.putAsync(() => SharedPreferences.getInstance());
 
   await Hive.initFlutter();
   Hive.registerAdapter(ExperimentAdapter());
   await Hive.openBox<Experiment>('experimentBox');
 
-  Get.put<ExperimentRepository>(HiveExperimentRepository(), permanent: true);
-  Get.put<ExperimentController>(
-    ExperimentController(Get.find<ExperimentRepository>()),
-    permanent: true,
-  );
+  Get.lazyPut<ExperimentRepository>(() => HiveExperimentRepository());
+  Get.lazyPut<ExperimentController>(() => ExperimentController(Get.find<ExperimentRepository>()));
 
   runApp(MainApp());
 }
