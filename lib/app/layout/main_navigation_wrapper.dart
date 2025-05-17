@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:xperinote/app/routes/app_routes.dart';
-import 'package:xperinote/app/widgets/custom_app_bar.dart';
 import 'package:xperinote/modules/community/community_view.dart';
 import 'package:xperinote/modules/experiment/experiment_view.dart';
 import 'package:xperinote/modules/template/template_view.dart';
@@ -66,7 +65,7 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: '研记'),
+      appBar: AppBar(title: Text('研记')),
       drawer: _buildDrawer(context),
       drawerEnableOpenDragGesture: Get.currentRoute == AppRoutes.home,
       body: IndexedStack(index: _selectedIndex, children: _pages),

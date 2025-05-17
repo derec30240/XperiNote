@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:xperinote/app/widgets/custom_app_bar.dart';
 import 'package:xperinote/data/controllers/settings_controller.dart';
 import 'package:xperinote/app/theme/app_theme.dart';
 
@@ -11,7 +10,7 @@ class SettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: '设置'),
+      appBar: AppBar(title: Text('设置')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
