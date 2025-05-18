@@ -1,6 +1,54 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/state_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:xperinote/data/models/experiment_model.dart';
+import 'package:xperinote/data/controllers/experiment_controller.dart';
+
+class SelectableExperimentCard extends StatelessWidget {
+  final Experiment experiment;
+
+  const SelectableExperimentCard({super.key, required this.experiment});
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = Get.find<ExperimentController>();
+
+    return Obx(() {
+      final isSelected = controller.selectedIds.contains(experiment.id);
+
+      return GestureDetector(
+        onLongPress: () {
+          if (!controller.isSelectionMode.value) {
+            controller.isSelectionMode.value = true;
+            controller.toggleSelection(experiment.id);
+          }
+        },
+        onTap: () {
+          if (controller.isSelectionMode.value) {
+            controller.toggleSelection(experiment.id);
+          } else {
+            // Navigate to detail page
+          }
+        },
+        child: Stack(
+          children: [
+            ExperimentCard(experiment: experiment),
+            if (controller.isSelectionMode.value)
+              Positioned(
+                top: 12.0,
+                right: 12.0,
+                child: Checkbox(
+                  value: isSelected,
+                  onChanged: (_) => controller.toggleSelection(experiment.id),
+                ),
+              ),
+          ],
+        ),
+      );
+    });
+  }
+}
 
 class ExperimentCard extends StatelessWidget {
   const ExperimentCard({super.key, required this.experiment});

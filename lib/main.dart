@@ -17,10 +17,13 @@ void main() async {
 
   await Hive.initFlutter();
   Hive.registerAdapter(ExperimentAdapter());
+  Hive.registerAdapter(ExperimentStatusAdapter());
   await Hive.openBox<Experiment>('experimentBox');
 
   Get.lazyPut<ExperimentRepository>(() => HiveExperimentRepository());
-  Get.lazyPut<ExperimentController>(() => ExperimentController(Get.find<ExperimentRepository>()));
+  Get.lazyPut<ExperimentController>(
+    () => ExperimentController(Get.find<ExperimentRepository>()),
+  );
 
   runApp(MainApp());
 }

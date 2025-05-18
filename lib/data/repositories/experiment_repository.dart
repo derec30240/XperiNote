@@ -7,6 +7,7 @@ abstract class ExperimentRepository {
   Future<void> addExperiment(Experiment experiment);
   Future<void> updateExperiment(String id, Experiment experiment);
   Future<void> deleteExperiment(String id);
+  Future<void> deleteExperiments(List<String> ids);
 }
 
 class HiveExperimentRepository implements ExperimentRepository {
@@ -56,6 +57,16 @@ class HiveExperimentRepository implements ExperimentRepository {
       throw ExperimentNotFoundException(id);
     }
     await _experimentBox.delete(id);
+  }
+
+  @override
+  Future<void> deleteExperiments(List<String> ids) async {
+    for (String id in ids) {
+      if (!_experimentBox.containsKey(id)) {
+        throw ExperimentNotFoundException(id);
+      }
+    }
+    await _experimentBox.deleteAll(ids);
   }
 }
 

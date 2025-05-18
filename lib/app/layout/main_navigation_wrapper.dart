@@ -89,13 +89,6 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Handle floating action button press
-        },
-        tooltip: '新建记录',
-        child: Icon(Icons.add),
-      ),
     );
   }
 }
