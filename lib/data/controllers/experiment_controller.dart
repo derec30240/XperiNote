@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:xperinote/app/widgets/custom_snack_bar.dart';
 import 'package:xperinote/data/models/experiment_model.dart';
 import 'package:xperinote/data/repositories/experiment_repository.dart';
 
@@ -41,7 +41,7 @@ class ExperimentController extends GetxController {
       _status.value = AsyncStatus.success;
     } catch (e) {
       _status.value = AsyncStatus.error;
-      Get.snackbar('错误', '数据加载失败: ${e.toString()}');
+      CustomSnackBar.show(Get.context!, '错误！数据加载失败: ${e.toString()}');
     } finally {
       update();
     }
@@ -51,23 +51,9 @@ class ExperimentController extends GetxController {
     try {
       await _repository.addExperiment(experiment);
       await _loadExperiments();
-      ScaffoldMessenger.of(Get.context!).hideCurrentSnackBar();
-      ScaffoldMessenger.of(Get.context!).showSnackBar(
-        SnackBar(
-          content: Text('实验 ${experiment.title} 添加成功'),
-          behavior: SnackBarBehavior.floating,
-          showCloseIcon: true,
-        ),
-      );
+      CustomSnackBar.show(Get.context!, '实验 ${experiment.title} 添加成功');
     } catch (e) {
-      ScaffoldMessenger.of(Get.context!).hideCurrentSnackBar();
-      ScaffoldMessenger.of(Get.context!).showSnackBar(
-        SnackBar(
-          content: Text('实验添加失败：${e.toString()}'),
-          behavior: SnackBarBehavior.floating,
-          showCloseIcon: true,
-        ),
-      );
+      CustomSnackBar.show(Get.context!, '实验添加失败：${e.toString()}');
     } finally {
       update();
     }
@@ -77,25 +63,11 @@ class ExperimentController extends GetxController {
     try {
       await _repository.deleteExperiments(_selectedIds.toList());
       await _loadExperiments();
-      ScaffoldMessenger.of(Get.context!).hideCurrentSnackBar();
-      ScaffoldMessenger.of(Get.context!).showSnackBar(
-        SnackBar(
-          content: Text('已删除 ${_selectedIds.length} 个实验'),
-          behavior: SnackBarBehavior.floating,
-          showCloseIcon: true,
-        ),
-      );
+      CustomSnackBar.show(Get.context!, '已删除 ${_selectedIds.length} 个实验');
       _selectedIds.clear();
       isSelectionMode.value = false;
     } catch (e) {
-      ScaffoldMessenger.of(Get.context!).hideCurrentSnackBar();
-      ScaffoldMessenger.of(Get.context!).showSnackBar(
-        SnackBar(
-          content: Text('删除失败：${e.toString()}'),
-          behavior: SnackBarBehavior.floating,
-          showCloseIcon: true,
-        ),
-      );
+      CustomSnackBar.show(Get.context!, '删除失败：${e.toString()}');
     } finally {
       update();
     }
