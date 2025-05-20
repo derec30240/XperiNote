@@ -1,3 +1,7 @@
+// experiment_view.dart
+// 实验模块主页面，负责实验的展示、创建、批量操作等交互逻辑
+// 支持进行中/已完成实验的切换、实验的多选与批量删除、实验的创建弹窗等
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
@@ -5,6 +9,7 @@ import 'package:xperinote/data/controllers/experiment_controller.dart';
 import 'package:xperinote/data/models/experiment_model.dart';
 import 'package:xperinote/modules/experiment/widgets/experiment_card.dart';
 
+/// 实验主页面，负责实验列表的展示、创建、批量操作等
 class ExperimentView extends GetView<ExperimentController> {
   const ExperimentView({super.key});
 
@@ -26,6 +31,7 @@ class ExperimentView extends GetView<ExperimentController> {
     );
   }
 
+  /// 构建顶部 AppBar，支持多选模式下的返回与全选
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
       leading: Obx(
@@ -64,6 +70,7 @@ class ExperimentView extends GetView<ExperimentController> {
     );
   }
 
+  /// 根据当前异步状态构建内容区域
   Widget _buildContent() {
     return switch (controller.status) {
       AsyncStatus.loading => const Center(child: CircularProgressIndicator()),
@@ -77,6 +84,7 @@ class ExperimentView extends GetView<ExperimentController> {
     };
   }
 
+  /// 构建实验列表
   Widget _buildExperimentList(List<Experiment> experiments) {
     if (experiments.isEmpty) {
       return const Center(child: Text('没有实验'));
@@ -92,10 +100,12 @@ class ExperimentView extends GetView<ExperimentController> {
     );
   }
 
+  /// 构建错误状态提示
   Widget _buildErrorState() {
     return const Center(child: Text('数据加载失败'));
   }
 
+  /// 弹出新建实验对话框
   void _showCreateDialog() {
     final formKey = GlobalKey<FormState>();
     final titleController = TextEditingController();
@@ -132,6 +142,7 @@ class ExperimentView extends GetView<ExperimentController> {
     );
   }
 
+  /// 处理实验创建逻辑，校验表单并添加实验
   void _handleCreateExperiment(GlobalKey<FormState> formKey, String title) {
     if (!formKey.currentState!.validate()) {
       return;
@@ -149,6 +160,7 @@ class ExperimentView extends GetView<ExperimentController> {
     Get.back();
   }
 
+  /// 构建底部批量操作栏（多选模式下显示）
   Widget _buildBottomSheet() {
     return Obx(
       () =>
@@ -188,6 +200,7 @@ class ExperimentView extends GetView<ExperimentController> {
     );
   }
 
+  /// 构建底部操作栏按钮
   Widget _buildActionButton({
     required IconData icon,
     required String label,
@@ -201,6 +214,7 @@ class ExperimentView extends GetView<ExperimentController> {
     );
   }
 
+  /// 弹出批量删除确认对话框
   void _showDeleteDialog() {
     showDialog(
       context: Get.context!,

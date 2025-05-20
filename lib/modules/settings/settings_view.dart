@@ -1,10 +1,19 @@
+// settings_view.dart
+// 设置页面，支持主题色与主题模式的切换，界面简洁直观
+// 通过下拉选择器实现主题相关设置，所有更改实时生效
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:xperinote/data/controllers/settings_controller.dart';
 import 'package:xperinote/app/theme/app_theme.dart';
 
+/// 设置页面组件
+///
+/// 提供主题颜色和主题模式的选择，所有设置通过 SettingsController 实时生效。
 class SettingsView extends StatelessWidget {
   SettingsView({super.key});
+
+  /// 全局设置控制器，负责主题色与模式的管理
   final SettingsController _settings = Get.find<SettingsController>();
 
   @override
@@ -16,20 +25,18 @@ class SettingsView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildThemeColorPicker(context),
-                const SizedBox(height: 24),
-                _buildThemeModeSelector(context),
-              ],
-            ),
+            // 主题色选择器
+            _buildThemeColorPicker(context),
+            const SizedBox(height: 24),
+            // 主题模式选择器
+            _buildThemeModeSelector(context),
           ],
         ),
       ),
     );
   }
 
+  /// 构建主题色选择器
   Widget _buildThemeColorPicker(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,6 +70,7 @@ class SettingsView extends StatelessWidget {
     );
   }
 
+  /// 构建主题模式选择器
   Widget _buildThemeModeSelector(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,6 +89,7 @@ class SettingsView extends StatelessWidget {
     );
   }
 
+  /// 获取主题色的中文名称
   String _getColorName(Color color) {
     switch (color) {
       case Colors.red:
