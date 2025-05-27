@@ -19,26 +19,44 @@ class ExperimentAdapter extends TypeAdapter<Experiment> {
     return Experiment(
       id: fields[0] as String,
       title: fields[1] as String,
-      createAt: fields[2] as DateTime,
-      status: fields[3] as ExperimentStatus,
-      progress: fields[4] as int,
+      description: fields[2] as String?,
+      createAt: fields[3] as DateTime,
+      startAt: fields[4] as DateTime?,
+      lastModifiedAt: fields[5] as DateTime,
+      status: fields[6] as ExperimentStatus,
+      steps: (fields[7] as List?)?.cast<ExperimentStep>(),
+      history: (fields[8] as List?)?.cast<ExperimentHistory>(),
+      data: fields[9] as ExperimentData?,
+      tags: (fields[10] as List?)?.cast<String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Experiment obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.title)
       ..writeByte(2)
-      ..write(obj.createAt)
+      ..write(obj.description)
       ..writeByte(3)
-      ..write(obj.status)
+      ..write(obj.createAt)
       ..writeByte(4)
-      ..write(obj.progress);
+      ..write(obj.startAt)
+      ..writeByte(5)
+      ..write(obj.lastModifiedAt)
+      ..writeByte(6)
+      ..write(obj.status)
+      ..writeByte(7)
+      ..write(obj.steps)
+      ..writeByte(8)
+      ..write(obj.history)
+      ..writeByte(9)
+      ..write(obj.data)
+      ..writeByte(10)
+      ..write(obj.tags);
   }
 
   @override
@@ -60,22 +78,32 @@ class ExperimentStatusAdapter extends TypeAdapter<ExperimentStatus> {
   ExperimentStatus read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return ExperimentStatus.ongoing;
+        return ExperimentStatus.draft;
       case 1:
+        return ExperimentStatus.ongoing;
+      case 2:
+        return ExperimentStatus.paused;
+      case 3:
         return ExperimentStatus.completed;
       default:
-        return ExperimentStatus.ongoing;
+        return ExperimentStatus.draft;
     }
   }
 
   @override
   void write(BinaryWriter writer, ExperimentStatus obj) {
     switch (obj) {
-      case ExperimentStatus.ongoing:
+      case ExperimentStatus.draft:
         writer.writeByte(0);
         break;
-      case ExperimentStatus.completed:
+      case ExperimentStatus.ongoing:
         writer.writeByte(1);
+        break;
+      case ExperimentStatus.paused:
+        writer.writeByte(2);
+        break;
+      case ExperimentStatus.completed:
+        writer.writeByte(3);
         break;
     }
   }

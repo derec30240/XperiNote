@@ -70,9 +70,15 @@ class HiveExperimentRepository implements ExperimentRepository {
     final update = Experiment(
       id: exist!.id,
       title: experiment.title,
+      description: experiment.description,
       createAt: experiment.createAt,
+      startAt: experiment.startAt,
+      lastModifiedAt: DateTime.now(),
       status: experiment.status,
-      progress: experiment.progress,
+      steps: experiment.steps,
+      history: experiment.history,
+      data: experiment.data,
+      tags: experiment.tags,
     );
     await _experimentBox.put(id, update);
   }

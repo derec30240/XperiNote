@@ -65,7 +65,7 @@ class SelectableExperimentCard extends StatelessWidget {
 
 /// 实验信息卡片组件
 ///
-/// 展示实验标题、状态、进度、创建时间等信息，
+/// 展示实验标题、状态、创建时间等信息，
 /// 并支持点击跳转到实验详情页（待实现）。
 class ExperimentCard extends StatelessWidget {
   const ExperimentCard({super.key, required this.experiment});
@@ -92,14 +92,6 @@ class ExperimentCard extends StatelessWidget {
                 ),
                 _buildStatusIndicator(context),
               ],
-            ),
-            const SizedBox(height: 8.0),
-            // 实验进度条
-            LinearProgressIndicator(
-              value: experiment.progress / 100,
-              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-              color: Theme.of(context).colorScheme.primary,
-              borderRadius: BorderRadius.circular(4.0),
             ),
             const SizedBox(height: 8.0),
             Row(

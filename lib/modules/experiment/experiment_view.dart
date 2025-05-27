@@ -152,8 +152,7 @@ class ExperimentView extends GetView<ExperimentController> {
       id: const Uuid().v4(),
       title: title,
       createAt: DateTime.now(),
-      status: ExperimentStatus.ongoing,
-      progress: 0,
+      lastModifiedAt: DateTime.now(),
     );
 
     controller.addExperiment(experiment);
