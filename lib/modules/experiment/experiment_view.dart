@@ -106,6 +106,7 @@ class ExperimentView extends GetView<ExperimentController> {
           experiment: experiments[index],
         );
       },
+      padding: const EdgeInsets.all(16.0),
     );
   }
 

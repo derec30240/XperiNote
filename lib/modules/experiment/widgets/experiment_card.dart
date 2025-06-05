@@ -100,14 +100,27 @@ class ExperimentCard extends StatelessWidget {
                 _buildStatusIndicator(context),
               ],
             ),
-            const SizedBox(height: 8.0),
+            Text(
+              experiment.description ?? '无描述',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // 实验创建时间
-                Text(
-                  '开始时间: ${DateFormat('yyyy-MM-dd HH:mm').format(experiment.createAt)}',
-                ),
+                Text(switch (experiment.status) {
+                  ExperimentStatus.draft =>
+                    '最后编辑: ${DateFormat('yyyy-MM-dd HH:mm').format(experiment.lastModifiedAt)}',
+                  ExperimentStatus.ongoing =>
+                    '开始时间: ${DateFormat('yyyy-MM-dd HH:mm').format(experiment.startAt!)}',
+                  ExperimentStatus.paused =>
+                    '开始时间: ${DateFormat('yyyy-MM-dd HH:mm').format(experiment.startAt!)}',
+                  ExperimentStatus.completed =>
+                    '完成时间: ${DateFormat('yyyy-MM-dd HH:mm').format(experiment.history!.last.endAt)}',
+                }, style: Theme.of(context).textTheme.bodyMedium),
                 // 跳转详情按钮（待实现）
                 IconButton(
                   icon: const Icon(Icons.chevron_right),
@@ -124,16 +137,22 @@ class ExperimentCard extends StatelessWidget {
   /// 构建实验状态指示器
   Widget _buildStatusIndicator(BuildContext context) {
     return Chip(
-      avatar: Icon(
-        experiment.status == ExperimentStatus.ongoing
-            ? Icons.access_time
-            : Icons.check_circle,
+      avatar: Icon(switch (experiment.status) {
+        ExperimentStatus.draft => Icons.drafts,
+        ExperimentStatus.ongoing => Icons.access_time,
+        ExperimentStatus.paused => Icons.pause,
+        ExperimentStatus.completed => Icons.check_circle,
+      }),
+      label: Text(
+        experiment.status.name.toUpperCase(),
+        style: Theme.of(context).textTheme.labelSmall,
       ),
-      label: Text(experiment.status.name.toUpperCase()),
-      backgroundColor:
-          experiment.status == ExperimentStatus.ongoing
-              ? Theme.of(context).colorScheme.secondaryContainer
-              : Theme.of(context).colorScheme.tertiaryContainer,
+      backgroundColor: switch (experiment.status) {
+        ExperimentStatus.draft => Colors.grey.shade300,
+        ExperimentStatus.ongoing => Colors.blue.shade100,
+        ExperimentStatus.paused => Colors.orange.shade100,
+        ExperimentStatus.completed => Colors.green.shade100,
+      },
     );
   }
 
