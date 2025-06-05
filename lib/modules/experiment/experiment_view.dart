@@ -119,6 +119,7 @@ class ExperimentView extends GetView<ExperimentController> {
   void _showCreateDialog() {
     final formKey = GlobalKey<FormState>();
     final titleController = TextEditingController();
+    final descriptionController = TextEditingController();
 
     showDialog(
       context: Get.context!,
@@ -127,14 +128,21 @@ class ExperimentView extends GetView<ExperimentController> {
             title: const Text('新建实验'),
             content: Form(
               key: formKey,
-              child: TextFormField(
-                controller: titleController,
-                autofocus: true,
-                decoration: const InputDecoration(
-                  labelText: '实验名称',
-                  hintText: '请输入实验名称',
-                ),
-                validator: (value) => value?.isEmpty ?? true ? '标题不能为空' : null,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    controller: titleController,
+                    autofocus: true,
+                    decoration: const InputDecoration(labelText: '实验名称'),
+                    validator:
+                        (value) => value?.isEmpty ?? true ? '标题不能为空' : null,
+                  ),
+                  TextFormField(
+                    controller: descriptionController,
+                    decoration: const InputDecoration(labelText: '实验描述（可选）'),
+                  ),
+                ],
               ),
             ),
             actions: [
@@ -144,6 +152,7 @@ class ExperimentView extends GetView<ExperimentController> {
                     () => _handleCreateExperiment(
                       formKey,
                       titleController.text.trim(),
+                      descriptionController.text.trim(),
                     ),
                 child: const Text('创建'),
               ),
@@ -153,7 +162,11 @@ class ExperimentView extends GetView<ExperimentController> {
   }
 
   /// 处理实验创建逻辑，校验表单并添加实验
-  void _handleCreateExperiment(GlobalKey<FormState> formKey, String title) {
+  void _handleCreateExperiment(
+    GlobalKey<FormState> formKey,
+    String title,
+    String description,
+  ) {
     if (!formKey.currentState!.validate()) {
       return;
     }
@@ -161,6 +174,7 @@ class ExperimentView extends GetView<ExperimentController> {
     final experiment = Experiment(
       id: const Uuid().v4(),
       title: title,
+      description: description.isNotEmpty ? description : null,
       createAt: DateTime.now(),
       lastModifiedAt: DateTime.now(),
     );
