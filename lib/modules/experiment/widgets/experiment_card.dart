@@ -86,9 +86,16 @@ class ExperimentCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // 实验标题
-                Text(
-                  experiment.title,
-                  style: Theme.of(context).textTheme.titleLarge,
+                Expanded(
+                  child: Text(
+                    experiment.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: true,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
                 _buildStatusIndicator(context),
               ],
