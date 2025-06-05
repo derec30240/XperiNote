@@ -31,10 +31,18 @@ class ExperimentController extends GetxController {
   AsyncStatus get status => _status.value;
   /// 所有实验列表
   List<Experiment> get experiments => _experiments.toList();
+  List<Experiment> get draftExperiments =>
+      _experiments
+          .where((experiment) => experiment.status == ExperimentStatus.draft)
+          .toList();
   /// 进行中的实验列表
   List<Experiment> get ongoingExperiments =>
       _experiments
           .where((experiment) => experiment.status == ExperimentStatus.ongoing)
+          .toList();
+  List<Experiment> get pausedExperiments =>
+      _experiments
+          .where((experiment) => experiment.status == ExperimentStatus.paused)
           .toList();
   /// 已完成的实验列表
   List<Experiment> get completedExperiments =>

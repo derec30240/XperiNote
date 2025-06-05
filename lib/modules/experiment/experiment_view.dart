@@ -17,7 +17,7 @@ class ExperimentView extends GetView<ExperimentController> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: DefaultTabController(
-        length: 2,
+        length: 4,
         child: Scaffold(
           appBar: _buildAppBar(context),
           body: Obx(() => _buildContent()),
@@ -66,7 +66,14 @@ class ExperimentView extends GetView<ExperimentController> {
                   : const SizedBox.shrink(),
         ),
       ],
-      bottom: TabBar(tabs: const [Tab(text: '进行中'), Tab(text: '已完成')]),
+      bottom: TabBar(
+        tabs: const [
+          Tab(text: '草稿'),
+          Tab(text: '进行中'),
+          Tab(text: '已暂停'),
+          Tab(text: '已完成'),
+        ],
+      ),
     );
   }
 
@@ -76,7 +83,9 @@ class ExperimentView extends GetView<ExperimentController> {
       AsyncStatus.loading => const Center(child: CircularProgressIndicator()),
       AsyncStatus.success => TabBarView(
         children: [
+          Obx(() => _buildExperimentList(controller.draftExperiments)),
           Obx(() => _buildExperimentList(controller.ongoingExperiments)),
+          Obx(() => _buildExperimentList(controller.pausedExperiments)),
           Obx(() => _buildExperimentList(controller.completedExperiments)),
         ],
       ),
