@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:xperinote/data/models/experiment_model.dart';
 import 'package:xperinote/data/controllers/experiment_controller.dart';
+import 'package:xperinote/modules/experiment/experiment_detail_view.dart';
 
 /// 可选实验卡片组件
 ///
@@ -140,8 +141,8 @@ class ExperimentCard extends StatelessWidget {
       avatar: Icon(switch (experiment.status) {
         ExperimentStatus.draft => Icons.drafts,
         ExperimentStatus.ongoing => Icons.access_time,
-        ExperimentStatus.paused => Icons.pause,
-        ExperimentStatus.completed => Icons.check_circle,
+        ExperimentStatus.paused => Icons.pause_circle_outline,
+        ExperimentStatus.completed => Icons.check_circle_outline,
       }),
       label: Text(
         experiment.status.name.toUpperCase(),
@@ -158,6 +159,6 @@ class ExperimentCard extends StatelessWidget {
 
   /// 跳转到实验详情页（待实现）
   void _navigateToDetail(BuildContext context) {
-    // Implement navigation to experiment detail page
+    Get.to(() => ExperimentDetailView(currentId: experiment.id));
   }
 }
