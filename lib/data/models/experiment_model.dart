@@ -83,6 +83,34 @@ class Experiment {
     this.data,
     this.tags,
   });
+
+  Experiment copyWith({
+    String? id,
+    String? title,
+    String? description,
+    DateTime? createAt,
+    DateTime? startAt,
+    DateTime? lastModifiedAt,
+    ExperimentStatus? status,
+    List<ExperimentStep>? steps,
+    List<ExperimentHistory>? history,
+    ExperimentData? data,
+    List<String>? tags,
+  }) {
+    return Experiment(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      createAt: createAt ?? this.createAt,
+      startAt: startAt ?? this.startAt,
+      lastModifiedAt: lastModifiedAt ?? this.lastModifiedAt,
+      status: status ?? this.status,
+      steps: steps ?? this.steps,
+      history: history ?? this.history,
+      data: data ?? this.data,
+      tags: tags ?? this.tags,
+    );
+  }
 }
 
 /// 实验状态枚举
