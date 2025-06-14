@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
+import 'package:uuid/uuid.dart';
 import 'package:xperinote/data/models/experiment_model.dart';
 import 'package:xperinote/data/controllers/experiment_controller.dart';
+import 'package:xperinote/data/models/experiment_step.dart';
 
 class ExperimentDetailView extends GetView<ExperimentController> {
   final String currentId;
@@ -188,20 +190,36 @@ class ExperimentDetailView extends GetView<ExperimentController> {
                 ),
               ],
             ),
+            SizedBox(height: 16.0),
             exp.steps == null
-                ? TextButton(onPressed: () {}, child: Text('添加实验步骤'))
+                ? TextButton(
+                  onPressed: () => _showAddStepDialog(exp),
+                  child: Text('添加实验步骤'),
+                )
                 : ListView.separated(
+                  shrinkWrap: true,
                   itemCount: exp.steps!.length,
                   itemBuilder: (ctx, index) {
                     return Row(
                       spacing: 8.0,
                       children: [
-                        Text('$index'),
-                        Column(
-                          children: [
-                            Text(exp.steps![index].title),
-                            Text(exp.steps![index].description ?? '无描述'),
-                          ],
+                        Text('${index + 1}'),
+                        SizedBox(width: 8.0),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                exp.steps![index].title,
+                                style: Theme.of(context).textTheme.titleMedium!
+                                    .copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                exp.steps![index].description ?? '无描述',
+                                style: Theme.of(context).textTheme.labelMedium,
+                              ),
+                            ],
+                          ),
                         ),
                         IconButton(
                           icon: const Icon(Icons.chevron_right),
@@ -414,5 +432,67 @@ class ExperimentDetailView extends GetView<ExperimentController> {
         ],
       ),
     );
+  }
+
+  void _showAddStepDialog(Experiment exp) {
+    final formKey = GlobalKey<FormState>();
+    final titleController = TextEditingController();
+    final descriptionController = TextEditingController();
+
+    showDialog(
+      context: Get.context!,
+      builder:
+          (context) => AlertDialog(
+            title: const Text('添加实验步骤'),
+            content: Form(
+              key: formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    controller: titleController,
+                    autofocus: true,
+                    decoration: const InputDecoration(
+                      labelText: '步骤名称',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator:
+                        (value) => value?.isEmpty ?? true ? '标题不能为空' : null,
+                  ),
+                  TextFormField(
+                    controller: descriptionController,
+                    decoration: const InputDecoration(
+                      labelText: '步骤描述（可选）',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(onPressed: Get.back, child: const Text('取消')),
+              FilledButton(
+                onPressed:
+                    () => _handleAddStep(
+                      exp,
+                      titleController.text.trim(),
+                      descriptionController.text.trim(),
+                    ),
+                child: const Text('添加'),
+              ),
+            ],
+          ),
+    );
+  }
+
+  void _handleAddStep(Experiment exp, String title, String description) {
+    final ExperimentStep step = ExperimentStep(
+      id: const Uuid().v4(),
+      title: title,
+      order: 0,
+      description: description.isNotEmpty ? description : null,
+    );
+    controller.addStep(exp, step);
+    Get.back();
   }
 }

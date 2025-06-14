@@ -4,6 +4,7 @@
 import 'package:get/get.dart';
 import 'package:xperinote/app/widgets/custom_snack_bar.dart';
 import 'package:xperinote/data/models/experiment_model.dart';
+import 'package:xperinote/data/models/experiment_step.dart';
 import 'package:xperinote/data/repositories/experiment_repository.dart';
 
 /// 异步状态枚举
@@ -15,12 +16,16 @@ enum AsyncStatus { loading, success, error }
 class ExperimentController extends GetxController {
   /// 实验数据仓库
   final ExperimentRepository _repository;
+
   /// 当前异步状态（加载中/成功/失败）
   final Rx<AsyncStatus> _status = AsyncStatus.loading.obs;
+
   /// 实验列表
   final RxList<Experiment> _experiments = <Experiment>[].obs;
+
   /// 当前选中的实验ID集合
   final RxSet<String> _selectedIds = <String>{}.obs;
+
   /// 是否处于多选模式
   final RxBool isSelectionMode = false.obs;
 
@@ -29,12 +34,14 @@ class ExperimentController extends GetxController {
 
   /// 当前异步状态
   AsyncStatus get status => _status.value;
+
   /// 所有实验列表
   List<Experiment> get experiments => _experiments.toList();
   List<Experiment> get draftExperiments =>
       _experiments
           .where((experiment) => experiment.status == ExperimentStatus.draft)
           .toList();
+
   /// 进行中的实验列表
   List<Experiment> get ongoingExperiments =>
       _experiments
@@ -44,6 +51,7 @@ class ExperimentController extends GetxController {
       _experiments
           .where((experiment) => experiment.status == ExperimentStatus.paused)
           .toList();
+
   /// 已完成的实验列表
   List<Experiment> get completedExperiments =>
       _experiments
@@ -51,6 +59,7 @@ class ExperimentController extends GetxController {
             (experiment) => experiment.status == ExperimentStatus.completed,
           )
           .toList();
+
   /// 当前选中的实验ID集合
   Set<String> get selectedIds => _selectedIds;
 
@@ -125,5 +134,21 @@ class ExperimentController extends GetxController {
   void exitSelectionMode() {
     _selectedIds.clear();
     isSelectionMode.value = false;
+  }
+
+  Future<void> addStep(Experiment experiment, ExperimentStep step) async {
+    try {
+      Experiment newExperiment = experiment.copyWith(
+        steps: (experiment.steps ?? []) + [step],
+        lastModifiedAt: DateTime.now()
+      );
+      await _repository.addStepToExperiment(experiment.id, newExperiment);
+      await _loadExperiments();
+      CustomSnackBar.show(Get.context!, '实验步骤添加成功');
+    } catch (e) {
+      CustomSnackBar.show(Get.context!, '实验步骤添加失败：${e.toString()}');
+    } finally {
+      update();
+    }
   }
 }

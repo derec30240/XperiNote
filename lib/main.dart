@@ -12,6 +12,7 @@ import 'package:xperinote/app/theme/app_theme.dart';
 import 'package:xperinote/data/controllers/experiment_controller.dart';
 import 'package:xperinote/data/controllers/settings_controller.dart';
 import 'package:xperinote/data/models/experiment_model.dart';
+import 'package:xperinote/data/models/experiment_step.dart';
 import 'package:xperinote/data/repositories/experiment_repository.dart';
 
 /// 应用程序主入口。
@@ -27,6 +28,7 @@ Future<void> main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(ExperimentAdapter());
   Hive.registerAdapter(ExperimentStatusAdapter());
+  Hive.registerAdapter(ExperimentStepAdapter());
   await Hive.openBox<Experiment>('experimentBox');
 
   // 依赖注入实验仓库与控制器

@@ -26,6 +26,8 @@ abstract class ExperimentRepository {
 
   /// 批量删除实验
   Future<void> deleteExperiments(List<String> ids);
+
+  Future<void> addStepToExperiment(String id, Experiment experiment);
 }
 
 /// Hive 实现的实验数据仓库
@@ -100,6 +102,14 @@ class HiveExperimentRepository implements ExperimentRepository {
       }
     }
     await _experimentBox.deleteAll(ids);
+  }
+
+  @override
+  Future<void> addStepToExperiment(String id, Experiment experiment) async {
+    if (!_experimentBox.containsKey(id)) {
+      throw ExperimentNotFoundException(id);
+    }
+    await _experimentBox.put(id, experiment);
   }
 }
 
