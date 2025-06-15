@@ -84,6 +84,10 @@ class ExperimentController extends GetxController {
     }
   }
 
+  Rx<Experiment?> getExperiment(String id) {
+    return Rx<Experiment?>(_experiments.firstWhereOrNull((n) => n.id == id));
+  }
+
   /// 添加实验并刷新列表
   Future<void> addExperiment(Experiment experiment) async {
     try {
@@ -140,7 +144,7 @@ class ExperimentController extends GetxController {
     try {
       Experiment newExperiment = experiment.copyWith(
         steps: (experiment.steps ?? []) + [step],
-        lastModifiedAt: DateTime.now()
+        lastModifiedAt: DateTime.now(),
       );
       await _repository.addStepToExperiment(experiment.id, newExperiment);
       await _loadExperiments();

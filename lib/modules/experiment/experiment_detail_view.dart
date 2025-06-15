@@ -13,15 +13,14 @@ class ExperimentDetailView extends GetView<ExperimentController> {
 
   @override
   Widget build(BuildContext context) {
-    final Experiment? currentExperiment = controller.experiments
-        .firstWhereOrNull((n) => n.id == currentId);
-
     return Scaffold(
       appBar: buildAppBar(context),
-      body:
-          currentExperiment == null
-              ? const Center(child: Text('未找到实验'))
-              : buildBody(context, currentExperiment),
+      body: Obx(() {
+        final currentExperiment = controller.getExperiment(currentId).value;
+        return currentExperiment == null
+            ? const Center(child: Text('未找到实验'))
+            : buildBody(context, currentExperiment);
+      }),
     );
   }
 
@@ -495,7 +494,7 @@ class ExperimentDetailView extends GetView<ExperimentController> {
     if (!formKey.currentState!.validate()) {
       return;
     }
-    
+
     final ExperimentStep step = ExperimentStep(
       id: const Uuid().v4(),
       title: title,
