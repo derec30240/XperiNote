@@ -13,7 +13,7 @@ import 'package:xperinote/modules/experiment/experiment_detail_view.dart';
 ///
 /// 支持长按进入多选模式，点击切换选中状态，
 /// 多选时右上角显示复选框。
-class SelectableExperimentCard extends StatelessWidget {
+class SelectableExperimentCard extends GetView<ExperimentController> {
   /// 当前实验对象
   final Experiment experiment;
 
@@ -21,23 +21,22 @@ class SelectableExperimentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<ExperimentController>();
-
     return Obx(() {
       // 判断当前实验是否被选中
       final isSelected = controller.selectedIds.contains(experiment.id);
+      final isSelectionMode = controller.isSelectionMode.value;
 
       return GestureDetector(
         // 长按进入多选模式并选中当前卡片
         onLongPress: () {
-          if (!controller.isSelectionMode.value) {
+          if (!isSelectionMode) {
             controller.isSelectionMode.value = true;
             controller.toggleSelection(experiment.id);
           }
         },
         // 点击：多选模式下切换选中，否则预留跳转详情
         onTap: () {
-          if (controller.isSelectionMode.value) {
+          if (isSelectionMode) {
             controller.toggleSelection(experiment.id);
           } else {
             // Navigate to detail page
@@ -48,7 +47,7 @@ class SelectableExperimentCard extends StatelessWidget {
             // 实验信息卡片
             ExperimentCard(experiment: experiment),
             // 多选模式下显示复选框
-            if (controller.isSelectionMode.value)
+            if (isSelectionMode)
               Positioned(
                 top: 12.0,
                 right: 12.0,
