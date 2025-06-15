@@ -474,6 +474,7 @@ class ExperimentDetailView extends GetView<ExperimentController> {
               FilledButton(
                 onPressed:
                     () => _handleAddStep(
+                      formKey,
                       exp,
                       titleController.text.trim(),
                       descriptionController.text.trim(),
@@ -485,7 +486,16 @@ class ExperimentDetailView extends GetView<ExperimentController> {
     );
   }
 
-  void _handleAddStep(Experiment exp, String title, String description) {
+  void _handleAddStep(
+    GlobalKey<FormState> formKey,
+    Experiment exp,
+    String title,
+    String description,
+  ) {
+    if (!formKey.currentState!.validate()) {
+      return;
+    }
+    
     final ExperimentStep step = ExperimentStep(
       id: const Uuid().v4(),
       title: title,
